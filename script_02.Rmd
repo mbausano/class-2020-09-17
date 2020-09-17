@@ -21,6 +21,29 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Once you have finished cleaning your data, figure out the course with the highest enrollment. And figure out how many students are enrolled in Gov 50. If you get a number much lower than 151, you have done something wrong . . .
 
+```{r}
+x <-readxl:: read_excel("raw_data/class_enrollment_summary_by_term_9-16-2020.xlsx")
+x %>%
+  select(c("Class Enrollment Summary by Term", "...2", "...3", "...4", "...5", "...6", "...7")) -> x
+x %>%
+  rename("Course ID"="Class Enrollment Summary by Term")  %>%
+  rename("Course Title"= "...2")  %>%
+  rename("Course Name"="...3") %>%
+  rename("Course Section"="...4")  %>%
+  rename("Course Department"= "...5")  %>%
+  rename("Instructor Name" = "...6") %>%
+  rename("UGrad"="...7") -> x
+x %>%
+  drop_na() -> new
+  new %>%
+    slice(-1)  %>%
+    mutate(UGrad=as.numeric(UGrad)) %>%
+    filter(UGrad>=10) -> x
+  x %>%
+    arrange(UGrad)
+  #Econ 10A  with 559
+
+```
 
 
 ### Scene 2
